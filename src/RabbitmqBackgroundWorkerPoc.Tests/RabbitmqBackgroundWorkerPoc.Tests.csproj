@@ -21,7 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RabbitmqBackgroundWorkerPoc.API\RabbitmqBackgroundWorkerPoc.API.csproj" />
+    <ProjectReference Include="..\RabbitmqBackgroundWorkerPoc.Api\RabbitmqBackgroundWorkerPoc.Api.csproj" />
+    <ProjectReference Include="..\RabbitmqBackgroundWorkerPoc.Messaging\RabbitmqBackgroundWorkerPoc.Messaging.csproj" />
     <ProjectReference Include="..\RabbitmqBackgroundWorkerPoc.Worker\RabbitmqBackgroundWorkerPoc.Worker.csproj" />
     <ProjectReference Include="..\RabbitmqBackgroundWorkerPoc.Processor\RabbitmqBackgroundWorkerPoc.Processor.csproj" />
   </ItemGroup>

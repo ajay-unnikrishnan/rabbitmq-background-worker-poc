@@ -1,6 +1,6 @@
-@RabbitmqBackgroundWorkerPoc.API_HostAddress = http://localhost:5143
+@RabbitmqBackgroundWorkerPoc.Api_HostAddress = http://localhost:5211
 
-GET {{RabbitmqBackgroundWorkerPoc.API_HostAddress}}/weatherforecast/
+GET {{RabbitmqBackgroundWorkerPoc.Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

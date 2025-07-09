@@ -8,3 +8,5 @@
 /src/RabbitmqBackgroundWorkerPoc.Worker/bin/Debug/net8.0
 /src/RabbitmqBackgroundWorkerPoc.Worker/obj
 /src/.vs
+/src/RabbitmqBackgroundWorkerPoc.Messaging/bin/Debug/net8.0
+/src/RabbitmqBackgroundWorkerPoc.Messaging/obj
