@@ -1,0 +1,10 @@
+﻿/src/RabbitmqBackgroundWorkerPoc.API/bin/Debug/net8.0
+/src/RabbitmqBackgroundWorkerPoc.API/obj/Debug/net8.0
+/src/RabbitmqBackgroundWorkerPoc.API/obj
+/src/RabbitmqBackgroundWorkerPoc.Processor/bin/Debug/net8.0
+/src/RabbitmqBackgroundWorkerPoc.Processor/obj
+/src/RabbitmqBackgroundWorkerPoc.Tests/bin/Debug/net8.0
+/src/RabbitmqBackgroundWorkerPoc.Tests/obj
+/src/RabbitmqBackgroundWorkerPoc.Worker/bin/Debug/net8.0
+/src/RabbitmqBackgroundWorkerPoc.Worker/obj
+/src/.vs
