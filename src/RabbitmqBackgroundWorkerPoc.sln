@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitmqBackgroundWorkerPoc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitmqBackgroundWorkerPoc.Messaging", "RabbitmqBackgroundWorkerPoc.Messaging\RabbitmqBackgroundWorkerPoc.Messaging.csproj", "{68AFA361-769B-4809-8966-0278961856EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitmqBackgroundWorkerPoc.Api", "RabbitmqBackgroundWorkerPoc.Api\RabbitmqBackgroundWorkerPoc.Api.csproj", "{86E8D577-CEBC-470F-8E30-76EC806B7C44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RabbitmqBackgroundWorkerPoc.Api", "RabbitmqBackgroundWorkerPoc.Api\RabbitmqBackgroundWorkerPoc.Api.csproj", "{86E8D577-CEBC-470F-8E30-76EC806B7C44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RabbitmqBackgroundWorkerPoc.Api.Business", "RabbitmqBackgroundWorker.Api.Business\RabbitmqBackgroundWorkerPoc.Api.Business.csproj", "{B83C3419-A93A-46F2-9E41-0B358311CE6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{86E8D577-CEBC-470F-8E30-76EC806B7C44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86E8D577-CEBC-470F-8E30-76EC806B7C44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86E8D577-CEBC-470F-8E30-76EC806B7C44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B83C3419-A93A-46F2-9E41-0B358311CE6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B83C3419-A93A-46F2-9E41-0B358311CE6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B83C3419-A93A-46F2-9E41-0B358311CE6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B83C3419-A93A-46F2-9E41-0B358311CE6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

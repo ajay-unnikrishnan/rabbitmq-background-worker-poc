@@ -4,8 +4,4 @@
     {
         Task EnsureQueue(string queueName);
     }
-    public interface IMessageQueueClient
-    {
-        Task PublishAsync(string queueName, string message);
-    }    
 }

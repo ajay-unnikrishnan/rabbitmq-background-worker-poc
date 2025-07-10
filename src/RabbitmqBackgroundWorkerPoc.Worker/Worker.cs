@@ -17,18 +17,15 @@ public class Worker : BackgroundService
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        _logger.LogInformation("ExecuteAsync");
+    {       
         await _consumer.StartListeningAsync("test-queue", async (message, token) =>
-        {
-            _logger.LogInformation("Executeing callback");
+        {            
             using (var scope = _scopeFactory.CreateScope())
             {
-                var processor = scope.ServiceProvider.GetRequiredService<IWorkProcessor>();
-                var status = await processor.ProcessAsync(message, stoppingToken);
+                var processor = scope.ServiceProvider.GetRequiredService<IWorkProcessor>();                
+                await processor.ProcessAsync(message.Text, stoppingToken);
 
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                _logger.LogInformation(status);
+                _logger.LogInformation("Ccompleted the process at: {time}", DateTimeOffset.Now);
             }
         }, stoppingToken);
     }

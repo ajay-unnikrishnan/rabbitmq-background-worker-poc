@@ -1,13 +1,14 @@
 ﻿using System.Text;
 using RabbitMQ.Client;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 namespace RabbitmqBackgroundWorkerPoc.Messaging
 {
-    public class RabbitMqClient : IMessageQueueClient
+    public class RabbitMqPublisher : IMessagePublisher
     {
         private readonly ConnectionFactory _factory;
-        public RabbitMqClient(IConfiguration config)
+        public RabbitMqPublisher(IConfiguration config)
         {
             var uri = config.GetConnectionString("RabbitMQ") ?? throw new Exception("RabbitMQ connection string missing");
             _factory = new ConnectionFactory
@@ -15,14 +16,12 @@ namespace RabbitmqBackgroundWorkerPoc.Messaging
                 Uri = new Uri(uri)
             };
         }
-        public async Task PublishAsync(string queueName, string message)
+        public async Task PublishAsync(string queueName, QueueMessage message)
         {
             using var connection = await _factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();
-                                   
-            //await channel.QueueDeclareAsync(queue: queueName, durable: true, exclusive: false, autoDelete: false);
-
-            var body = Encoding.UTF8.GetBytes(message);
+                                               
+            var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
             await channel.BasicPublishAsync(exchange: string.Empty, routingKey: queueName, mandatory: false, body: body);
 
             await channel.CloseAsync();

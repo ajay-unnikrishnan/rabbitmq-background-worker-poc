@@ -1,4 +1,6 @@
 using RabbitmqBackgroundWorkerPoc.Messaging;
+using RabbitmqBackgroundWorkerPoc.Api.Business;
+using RabbitmqBackgroundWorker.Api.Business;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +22,8 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddSingleton<IMessageQueueClient, RabbitMqClient>();
+builder.Services.AddSingleton<IMessagePublisher, RabbitMqPublisher>();
+builder.Services.AddScoped<IMessagePublisherService, MessagePublisherService>();
 
 var app = builder.Build();
 

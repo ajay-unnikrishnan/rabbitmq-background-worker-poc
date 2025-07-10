@@ -2,6 +2,7 @@
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using System.Text.Json;
 
 namespace RabbitmqBackgroundWorkerPoc.Messaging
 {
@@ -17,7 +18,7 @@ namespace RabbitmqBackgroundWorkerPoc.Messaging
                 ConsumerDispatchConcurrency = 1
             };
         }
-        public async Task StartListeningAsync(string queueName, Func<string, CancellationToken, Task> onMesssage, CancellationToken stoppingToken)
+        public async Task StartListeningAsync(string queueName, Func<QueueMessage, CancellationToken, Task> onMesssage, CancellationToken stoppingToken)
         {
             using var connection = await _factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();
@@ -28,11 +29,11 @@ namespace RabbitmqBackgroundWorkerPoc.Messaging
 
             consumer.ReceivedAsync += async (model, ea) =>
             {
-                var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
+                var json = Encoding.UTF8.GetString(ea.Body.ToArray());
 
                 try
                 {
+                    var message = JsonSerializer.Deserialize<QueueMessage>(json) ?? throw new Exception("Invalid message format");
                     await onMesssage(message, stoppingToken);
                     await channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
                 }
@@ -40,9 +41,13 @@ namespace RabbitmqBackgroundWorkerPoc.Messaging
                 {
                     await channel.BasicNackAsync(ea.DeliveryTag, multiple: false, requeue: true);
                 }
-                await channel.BasicConsumeAsync(queue: queueName, autoAck: false, consumer: consumer);
-
             };
+            await channel.BasicConsumeAsync(queue: queueName, autoAck: false, consumer: consumer);
+                       
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await Task.Delay(1000, stoppingToken);
+            }
 
             await channel.CloseAsync();
             await connection.CloseAsync();
