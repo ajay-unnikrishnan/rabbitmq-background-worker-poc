@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
@@ -9,21 +10,22 @@ namespace RabbitmqBackgroundWorkerPoc.Messaging
     public class RabbitMqConsumer : IQueueConsumer
     {
         private readonly ConnectionFactory _factory;
-        public RabbitMqConsumer(IConfiguration config)
+        private readonly MessagingSettings _settings;
+        public RabbitMqConsumer(IConfiguration config, IOptions<MessagingSettings> options)
         {
-            var uri = config.GetConnectionString("RabbitMQ") ?? throw new Exception("RabbitMQ connection string missing");
+            _settings = options.Value;
+
             _factory = new ConnectionFactory
             {
-                Uri = new Uri(uri),
-                ConsumerDispatchConcurrency = 1
+                Uri = new Uri(_settings.RabbitMqUri)
             };
         }
-        public async Task StartListeningAsync(string queueName, Func<QueueMessage, CancellationToken, Task> onMesssage, CancellationToken stoppingToken)
+        public async Task StartListeningAsync(Func<QueueMessage, CancellationToken, Task> onMesssage, CancellationToken stoppingToken)
         {
             using var connection = await _factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();
 
-            await channel.QueueDeclareAsync(queue: queueName, durable: true, exclusive: false, autoDelete: false);
+            await channel.QueueDeclareAsync(queue: _settings.QueueName, durable: true, exclusive: false, autoDelete: false);
 
             var consumer = new AsyncEventingBasicConsumer(channel);
 
@@ -42,7 +44,7 @@ namespace RabbitmqBackgroundWorkerPoc.Messaging
                     await channel.BasicNackAsync(deliveryEventArgs.DeliveryTag, multiple: false, requeue: true);
                 }
             };
-            await channel.BasicConsumeAsync(queue: queueName, autoAck: false, consumer: consumer);
+            await channel.BasicConsumeAsync(queue: _settings.QueueName, autoAck: false, consumer: consumer);
                        
             while (!stoppingToken.IsCancellationRequested)
             {

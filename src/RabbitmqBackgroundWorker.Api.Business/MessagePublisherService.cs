@@ -18,7 +18,7 @@ namespace RabbitmqBackgroundWorkerPoc.Api.Business
                 Id = Guid.NewGuid(),
                 Text = userMessage
             };
-            await _messagePublisher.PublishAsync("test-queue", message);
+            await _messagePublisher.PublishAsync(message);
         }
     }
 }

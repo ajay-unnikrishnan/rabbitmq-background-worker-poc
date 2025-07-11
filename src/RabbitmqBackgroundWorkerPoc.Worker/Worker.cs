@@ -18,7 +18,7 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {       
-        await _consumer.StartListeningAsync("test-queue", async (message, token) =>
+        await _consumer.StartListeningAsync(async (message, token) =>
         {            
             using (var scope = _scopeFactory.CreateScope())
             {

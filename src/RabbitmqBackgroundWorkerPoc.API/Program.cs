@@ -21,6 +21,12 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services
+    .AddOptions<MessagingSettings>()
+    .Bind(builder.Configuration.GetSection("Messaging"))
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
 builder.Services.AddSingleton<IQueueInitializer, RabbitMqQueueInitializer>();
 builder.Services.AddSingleton<IMessagePublisher, RabbitMqPublisher>();
 builder.Services.AddScoped<IMessagePublisherService, MessagePublisherService>();
@@ -34,9 +40,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 using (var scope = app.Services.CreateScope())
-{
-    var queueInitializer = scope.ServiceProvider.GetRequiredService<IQueueInitializer>();
-    await queueInitializer.EnsureQueueAsync("test-queue");
+{    
+    var queueInitializer = scope.ServiceProvider.GetRequiredService<IQueueInitializer>();    
+    await queueInitializer.EnsureQueueAsync();
 }
 
 app.UseHttpsRedirection();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
 namespace RabbitmqBackgroundWorkerPoc.Messaging
@@ -6,23 +7,25 @@ namespace RabbitmqBackgroundWorkerPoc.Messaging
     public class RabbitMqQueueInitializer : IQueueInitializer
     {
         private readonly ConnectionFactory _factory;
-        public RabbitMqQueueInitializer(IConfiguration config)
+        private readonly MessagingSettings _settings;
+        public RabbitMqQueueInitializer(IConfiguration config, IOptions<MessagingSettings> options)
         {
-            var uri = config.GetConnectionString("RabbitMQ") ?? throw new Exception("RabbitMQ connection string missing");
+            _settings = options.Value;
+            
             _factory = new ConnectionFactory
             {
-                Uri = new Uri(uri)                
-            };
+                Uri = new Uri(_settings.RabbitMqUri)                
+            };            
         }
         // EnsureQueueAsync is called only once in API startup to avoid declaring the queue on every publish.
         // In the worker, the queue is declared inside the consumer (StartListeningAsync) which is a one-time task
         // and it ensures the queue exists before consumption.
-        public async Task EnsureQueueAsync(string queueName)
+        public async Task EnsureQueueAsync()
         {
             using var connection = await _factory.CreateConnectionAsync();
             using var channel = await connection.CreateChannelAsync();
 
-            await channel.QueueDeclareAsync(queue: queueName, durable: true, exclusive: false, autoDelete: false);            
+            await channel.QueueDeclareAsync(queue: _settings.QueueName, durable: true, exclusive: false, autoDelete: false);            
 
             await channel.CloseAsync();
             await connection.CloseAsync();
