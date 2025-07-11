@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace RabbitmqBackgroundWorkerPoc.Messaging
 {
-    public class RabbitMqConsumer : IMessageQueueConsumer
+    public class RabbitMqConsumer : IQueueConsumer
     {
         private readonly ConnectionFactory _factory;
         public RabbitMqConsumer(IConfiguration config)

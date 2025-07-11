@@ -2,6 +2,6 @@
 {
     public interface IQueueInitializer
     {
-        Task EnsureQueue(string queueName);
+        Task EnsureQueueAsync(string queueName);
     }
 }

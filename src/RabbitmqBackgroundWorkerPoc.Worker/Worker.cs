@@ -7,9 +7,9 @@ public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
     private readonly IServiceScopeFactory _scopeFactory;
-    private readonly IMessageQueueConsumer _consumer;
+    private readonly IQueueConsumer _consumer;
 
-    public Worker(ILogger<Worker> logger, IServiceScopeFactory scopeFactory, IMessageQueueConsumer consumer)
+    public Worker(ILogger<Worker> logger, IServiceScopeFactory scopeFactory, IQueueConsumer consumer)
     {
         _logger = logger;
         _scopeFactory = scopeFactory;
