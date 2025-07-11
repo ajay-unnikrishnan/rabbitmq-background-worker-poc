@@ -2,7 +2,7 @@
 using RabbitmqBackgroundWorkerPoc.Messaging;
 
 
-namespace RabbitmqBackgroundWorker.Api.Business
+namespace RabbitmqBackgroundWorkerPoc.Api.Business
 {
     public class MessagePublisherService: IMessagePublisherService
     {

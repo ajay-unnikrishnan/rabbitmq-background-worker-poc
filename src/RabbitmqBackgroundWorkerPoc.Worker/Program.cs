@@ -6,7 +6,7 @@ var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddScoped<IWorkProcessor, WorkProcessor>();
-builder.Services.AddSingleton<IMessageQueueConsumer, RabbitMqConsumer>();
+builder.Services.AddSingleton<IQueueConsumer, RabbitMqConsumer>();
 
 var host = builder.Build();
 host.Run();

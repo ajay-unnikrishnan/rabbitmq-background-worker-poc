@@ -1,6 +1,5 @@
 using RabbitmqBackgroundWorkerPoc.Messaging;
 using RabbitmqBackgroundWorkerPoc.Api.Business;
-using RabbitmqBackgroundWorker.Api.Business;
 
 var builder = WebApplication.CreateBuilder(args);
 
