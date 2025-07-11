@@ -27,19 +27,19 @@ namespace RabbitmqBackgroundWorkerPoc.Messaging
 
             var consumer = new AsyncEventingBasicConsumer(channel);
 
-            consumer.ReceivedAsync += async (model, ea) =>
+            consumer.ReceivedAsync += async (model, deliveryEventArgs) =>
             {
-                var json = Encoding.UTF8.GetString(ea.Body.ToArray());
+                var json = Encoding.UTF8.GetString(deliveryEventArgs.Body.ToArray());
 
                 try
                 {
                     var message = JsonSerializer.Deserialize<QueueMessage>(json) ?? throw new Exception("Invalid message format");
                     await onMesssage(message, stoppingToken);
-                    await channel.BasicAckAsync(ea.DeliveryTag, multiple: false);
+                    await channel.BasicAckAsync(deliveryEventArgs.DeliveryTag, multiple: false);
                 }
                 catch
                 {
-                    await channel.BasicNackAsync(ea.DeliveryTag, multiple: false, requeue: true);
+                    await channel.BasicNackAsync(deliveryEventArgs.DeliveryTag, multiple: false, requeue: true);
                 }
             };
             await channel.BasicConsumeAsync(queue: queueName, autoAck: false, consumer: consumer);

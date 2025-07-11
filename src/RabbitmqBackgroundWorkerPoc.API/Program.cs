@@ -37,7 +37,7 @@ if (app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var queueInitializer = scope.ServiceProvider.GetRequiredService<IQueueInitializer>();
-    await queueInitializer.EnsureQueueAsync("fsg-queue");
+    await queueInitializer.EnsureQueueAsync("test-queue");
 }
 
 app.UseHttpsRedirection();
