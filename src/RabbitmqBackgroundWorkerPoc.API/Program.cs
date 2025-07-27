@@ -1,7 +1,29 @@
 using RabbitmqBackgroundWorkerPoc.Messaging;
 using RabbitmqBackgroundWorkerPoc.Api.Business;
+using Serilog.Sinks.MSSqlServer;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DBConnection");
+
+#region Serilog;
+
+Log.Logger = new LoggerConfiguration()    
+    .WriteTo.MSSqlServer(
+        connectionString,
+        sinkOptions: new MSSqlServerSinkOptions
+        {
+            TableName = "AppLogs",
+            AutoCreateSqlTable = false
+        })
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog();
+
+#endregion
 
 // Add services to the container.
 
@@ -52,3 +74,23 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+///////////////////////////////////
+///
+//dotnet add package Serilog
+//dotnet add package Serilog.Sinks.MSSqlServer
+//dotnet add package Serilog.Sinks.Console
+//dotnet add package Serilog.AspNetCore
+
+//CREATE TABLE [dbo].[Logs] (
+//    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+//    [Message] NVARCHAR(MAX) NULL,
+//    [MessageTemplate] NVARCHAR(MAX) NULL,
+//    [Level] NVARCHAR(128) NULL,
+//    [TimeStamp] DATETIMEOFFSET NOT NULL,
+//    [Exception] NVARCHAR(MAX) NULL,
+//    [Properties] NVARCHAR(MAX) NULL,
+//    [LogEvent] NVARCHAR(MAX) NULL,
+//    [ProcessId] NVARCHAR(100) NULL -- Custom column for the process ID
+//);

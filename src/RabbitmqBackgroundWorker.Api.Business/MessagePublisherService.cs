@@ -1,5 +1,6 @@
 ﻿using RabbitmqBackgroundWorkerPoc.Api.Business;
 using RabbitmqBackgroundWorkerPoc.Messaging;
+using Microsoft.Extensions.Logging;
 
 
 namespace RabbitmqBackgroundWorkerPoc.Api.Business
@@ -7,9 +8,11 @@ namespace RabbitmqBackgroundWorkerPoc.Api.Business
     public class MessagePublisherService: IMessagePublisherService
     {
         private readonly IMessagePublisher _messagePublisher;
-        public MessagePublisherService(IMessagePublisher messagePublisher)
+        private readonly ILogger<MessagePublisherService> _logger;
+        public MessagePublisherService(IMessagePublisher messagePublisher, ILogger<MessagePublisherService> logger)
         {
             _messagePublisher = messagePublisher;
+            _logger = logger;
         }
         public async Task PublishMessageAsync(string userMessage)
         {
@@ -19,6 +22,7 @@ namespace RabbitmqBackgroundWorkerPoc.Api.Business
                 Text = userMessage
             };
             await _messagePublisher.PublishAsync(message);
+            _logger.LogInformation("Message with ID {MessageId} published to queue", message.ProcessId);
         }
     }
 }
