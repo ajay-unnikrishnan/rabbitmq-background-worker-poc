@@ -1,5 +1,6 @@
 using RabbitmqBackgroundWorkerPoc.Messaging;
 using RabbitmqBackgroundWorkerPoc.Processor;
+using Serilog.Context;
 
 namespace RabbitmqBackgroundWorkerPoc.Worker;
 
@@ -17,16 +18,21 @@ public class Worker : BackgroundService
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {       
+    {
         await _consumer.StartListeningAsync(async (message, token) =>
-        {            
-            using (var scope = _scopeFactory.CreateScope())
+        {
+            using (LogContext.PushProperty("ProcessId", message.ProcessId))
             {
-                var processor = scope.ServiceProvider.GetRequiredService<IWorkProcessor>();                
+                var scope = _scopeFactory.CreateScope();
+               
+                var processor = scope.ServiceProvider.GetRequiredService<IWorkProcessor>();
+
+                _logger.LogInformation("Started processing message with ProcessId: {ProcessId}", message.ProcessId.ToString());
                 await processor.ProcessAsync(message.Text, stoppingToken);
 
-                _logger.LogInformation("Ccompleted the process at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("Completed processing message with ProcessId: {ProcessId}", message.ProcessId.ToString());
             }
         }, stoppingToken);
+        
     }
 }

@@ -15,7 +15,7 @@ namespace RabbitmqBackgroundWorkerPoc.Api.Business
         {
             var message = new QueueMessage
             {
-                Id = Guid.NewGuid(),
+                ProcessId = Guid.NewGuid(),
                 Text = userMessage
             };
             await _messagePublisher.PublishAsync(message);

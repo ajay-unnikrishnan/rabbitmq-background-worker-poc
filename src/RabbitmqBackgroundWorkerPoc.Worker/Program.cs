@@ -1,8 +1,44 @@
 using RabbitmqBackgroundWorkerPoc.Messaging;
 using RabbitmqBackgroundWorkerPoc.Processor;
 using RabbitmqBackgroundWorkerPoc.Worker;
+using Serilog;
+using Serilog.Sinks.MSSqlServer;
+using System.Collections.ObjectModel;
+using System.Data;
 
 var builder = Host.CreateApplicationBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("DBConnection");
+
+#region Serilog;
+
+var columnOptions = new ColumnOptions
+{
+    AdditionalColumns = new Collection<SqlColumn>
+    {
+        new SqlColumn("ProcessId", SqlDbType.NVarChar, dataLength: 100)
+    }    
+};
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console(outputTemplate:
+        "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .WriteTo.MSSqlServer(
+        connectionString,
+        sinkOptions: new MSSqlServerSinkOptions
+        {
+            TableName = "AppLogs",
+            AutoCreateSqlTable = false
+        },
+        columnOptions: columnOptions)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog();
+
+#endregion
+
 builder.Services.AddHostedService<Worker>();
 
 builder.Services
