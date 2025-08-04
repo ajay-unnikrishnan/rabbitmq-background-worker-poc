@@ -2,6 +2,7 @@ using RabbitmqBackgroundWorkerPoc.Messaging;
 using RabbitmqBackgroundWorkerPoc.Api.Business;
 using Serilog.Sinks.MSSqlServer;
 using Serilog;
+using RabbitmqBackgroundWorkerPoc.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,6 +68,8 @@ using (var scope = app.Services.CreateScope())
     await queueInitializer.EnsureQueueAsync();
 }
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
@@ -83,7 +86,7 @@ app.Run();
 //dotnet add package Serilog.Sinks.Console
 //dotnet add package Serilog.AspNetCore
 
-//CREATE TABLE [dbo].[Logs] (
+//CREATE TABLE[dbo].[AppLogs] (
 //    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
 //    [Message] NVARCHAR(MAX) NULL,
 //    [MessageTemplate] NVARCHAR(MAX) NULL,

@@ -12,3 +12,5 @@
 /src/RabbitmqBackgroundWorkerPoc.Messaging/obj
 /src/RabbitmqBackgroundWorker.Api.Business/bin/Debug/net8.0
 /src/RabbitmqBackgroundWorker.Api.Business/obj
+/src/RabbitmqBackgroundWorkerPoc.Utilities/bin/Debug/net8.0
+/src/RabbitmqBackgroundWorkerPoc.Utilities/obj

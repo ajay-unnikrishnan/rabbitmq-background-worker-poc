@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RabbitmqBackgroundWorkerPoc.Messaging\RabbitmqBackgroundWorkerPoc.Messaging.csproj" />
+    <ProjectReference Include="..\RabbitmqBackgroundWorkerPoc.Utilities\RabbitmqBackgroundWorkerPoc.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

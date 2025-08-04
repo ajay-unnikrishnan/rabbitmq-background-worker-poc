@@ -1,5 +1,4 @@
-﻿using RabbitmqBackgroundWorkerPoc.Api.Business;
-using RabbitmqBackgroundWorkerPoc.Messaging;
+﻿using RabbitmqBackgroundWorkerPoc.Messaging;
 using Microsoft.Extensions.Logging;
 
 
@@ -15,7 +14,7 @@ namespace RabbitmqBackgroundWorkerPoc.Api.Business
             _logger = logger;
         }
         public async Task PublishMessageAsync(string userMessage)
-        {
+        {            
             var message = new QueueMessage
             {
                 ProcessId = Guid.NewGuid(),
