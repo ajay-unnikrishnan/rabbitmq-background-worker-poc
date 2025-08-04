@@ -20,6 +20,7 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        _logger.LogInformation("Worker started listening to the queue");
         await _consumer.StartListeningAsync(async (message, token) =>
         {
             using (LogContext.PushProperty("ProcessId", message.ProcessId))

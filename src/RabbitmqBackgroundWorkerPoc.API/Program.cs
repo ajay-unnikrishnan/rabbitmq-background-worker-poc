@@ -80,7 +80,19 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+try
+{
+    Log.Information("Starting API host...");
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "API host terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
 
 
 ///////////////////////////////////

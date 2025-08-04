@@ -44,4 +44,16 @@ builder.Services.AddScoped<IWorkProcessor, WorkProcessor>();
 builder.Services.AddSingleton<IQueueConsumer, RabbitMqConsumer>();
 
 var host = builder.Build();
-host.Run();
+try
+{
+    Log.Information("Starting Worker host...");
+    host.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Worker host terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
