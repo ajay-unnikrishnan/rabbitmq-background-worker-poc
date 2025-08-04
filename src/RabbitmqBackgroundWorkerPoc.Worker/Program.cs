@@ -1,5 +1,6 @@
 using RabbitmqBackgroundWorkerPoc.Messaging;
 using RabbitmqBackgroundWorkerPoc.Processor;
+using RabbitmqBackgroundWorkerPoc.Utilities;
 using RabbitmqBackgroundWorkerPoc.Worker;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
@@ -21,7 +22,7 @@ Log.Logger = new LoggerConfiguration()
         sinkOptions: new MSSqlServerSinkOptions
         {
             TableName = "AppLogs",
-            AutoCreateSqlTable = false
+            AutoCreateSqlTable = true
         },
         columnOptions: ColumnOptionsFactory.Create())
     .Enrich.FromLogContext()

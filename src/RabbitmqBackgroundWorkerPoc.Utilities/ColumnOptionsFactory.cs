@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Data;
 
-namespace RabbitmqBackgroundWorkerPoc.Worker
+namespace RabbitmqBackgroundWorkerPoc.Utilities
 {
     public static class ColumnOptionsFactory
     {
