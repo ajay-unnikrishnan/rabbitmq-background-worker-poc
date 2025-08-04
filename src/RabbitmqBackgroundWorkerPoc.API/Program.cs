@@ -10,7 +10,11 @@ var connectionString = builder.Configuration.GetConnectionString("DBConnection")
 
 #region Serilog;
 
-Log.Logger = new LoggerConfiguration()    
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning) //Only log Warning or above for logs from the Microsoft.* namespaces
+    .MinimumLevel.Override("Microsoft.AspNetCore.HttpsPolicy", Serilog.Events.LogEventLevel.Error)
+    .WriteTo.Console()
     .WriteTo.MSSqlServer(
         connectionString,
         sinkOptions: new MSSqlServerSinkOptions
@@ -18,7 +22,7 @@ Log.Logger = new LoggerConfiguration()
             TableName = "AppLogs",
             AutoCreateSqlTable = false
         })
-    .Enrich.FromLogContext()
+    .Enrich.FromLogContext()    
     .CreateLogger();
 
 builder.Logging.ClearProviders();
