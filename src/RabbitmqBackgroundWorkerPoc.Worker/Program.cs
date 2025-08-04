@@ -17,7 +17,17 @@ var columnOptions = new ColumnOptions
     AdditionalColumns = new Collection<SqlColumn>
     {
         new SqlColumn("ProcessId", SqlDbType.NVarChar, dataLength: 100)
-    }    
+    },    
+    Store = new Collection<StandardColumn>
+    {
+        StandardColumn.Message,
+        StandardColumn.MessageTemplate,
+        StandardColumn.Level,
+        StandardColumn.TimeStamp,
+        StandardColumn.Exception,
+        StandardColumn.Properties,
+        StandardColumn.LogEvent
+    }
 };
 
 Log.Logger = new LoggerConfiguration()

@@ -1,5 +1,6 @@
 using RabbitmqBackgroundWorkerPoc.Messaging;
 using RabbitmqBackgroundWorkerPoc.Processor;
+using RabbitmqBackgroundWorkerPoc.Utilities;
 using Serilog.Context;
 
 namespace RabbitmqBackgroundWorkerPoc.Worker;
@@ -23,14 +24,26 @@ public class Worker : BackgroundService
         {
             using (LogContext.PushProperty("ProcessId", message.ProcessId))
             {
-                var scope = _scopeFactory.CreateScope();
+                try
+                {
+                    var scope = _scopeFactory.CreateScope();
                
-                var processor = scope.ServiceProvider.GetRequiredService<IWorkProcessor>();
+                    var processor = scope.ServiceProvider.GetRequiredService<IWorkProcessor>();
 
-                _logger.LogInformation("Started processing message with ProcessId: {ProcessId}", message.ProcessId.ToString());
-                await processor.ProcessAsync(message.Text, stoppingToken);
+                    _logger.LogInformation("Started processing message with ProcessId: {ProcessId}", message.ProcessId.ToString());
+                    
+                    await processor.ProcessAsync(message.Text, stoppingToken);
 
-                _logger.LogInformation("Completed processing message with ProcessId: {ProcessId}", message.ProcessId.ToString());
+                    _logger.LogInformation("Completed processing message with ProcessId: {ProcessId}", message.ProcessId.ToString());
+                }
+                catch (WorkerException ex)
+                {
+                    _logger.LogError(ex, "{ErrorMessage} | ProcessId: {ProcessId}", ex.Message, message.ProcessId.ToString());                    
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Unhandled exception occurred while processing message with ID {ProcessId}", message.ProcessId.ToString());                    
+                }
             }
         }, stoppingToken);
         
